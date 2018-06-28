@@ -58,6 +58,7 @@ Plugin 'ervandew/supertab'
 Plugin 'vim-airline/vim-airline'
 Plugin 'djoshea/vim-autoread'
 Plugin 'sgur/vim-editorconfig'
+Plugin 'vim-utils/vim-man'
 Plugin 'matze/vim-move'
 Plugin 'tpope/vim-vinegar'
 

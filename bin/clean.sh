@@ -24,7 +24,7 @@ rm -rf ./plugged/ale/.git;
 # plugged/supertab
 
 rm ./plugged/supertab/Makefile;
-rm ./plugged/supertab/README.txt;
+rm ./plugged/supertab/README.rst;
 rm -rf ./plugged/supertab/.git;
 
 
@@ -56,6 +56,16 @@ rm ./plugged/vim-editorconfig/LICENSE;
 rm ./plugged/vim-editorconfig/README.md;
 rm -rf ./plugged/vim-editorconfig/.git;
 
+
+
+# plugged/vim-man
+
+rm ./plugged/vim-man/CHANGELOG.md;
+rm ./plugged/vim-man/README.md;
+rm ./plugged/vim-man/improvements.md;
+rm ./plugged/vim-man/.gitignore;
+rm -rf ./plugged/vim-man/.git;
+rm -rf ./plugged/vim-man/test;
 
 
 # plugged/vim-move

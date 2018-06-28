@@ -14,3 +14,5 @@ function! CustomAirlineThemeSymbols(palette)
 	let g:airline_symbols.whitespace = 'Ξ'
 endfunction
 
+setlocal statusline=%{pathshorten(expand('%:f'))}
+
