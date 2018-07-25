@@ -53,6 +53,8 @@ All key bindings are defined in [mappings.vim](./mappings.vim).
 - `[Shift] + [Page Up]` opens previous tab
 - `[Shift] + [Page Down]` opens next tab
 - `[Ctrl] + [W], [C]` closes tab
+- `[Ctrl] + [W], [G], [Arrow Key]` moves current window
+- `[Ctrl] + [W], [G], [H/J/K/L]` moves current window
 
 **Key Bindings / Visual Mode**
 
@@ -78,5 +80,6 @@ The templates are defined in [templates.vim](./templates.vim)
 - [djoshea/vim-autoread](https://github.com/djoshea/vim-autoread)
 - [sgur/vim-editorconfig](https://github.com/sgur/vim-editorconfig)
 - [matze/vim-move](https://github.com/matze/vim-move)
+- [andymass/vim-tradewinds](https://github.com/andymass/vim-tradewinds)
 - [tpope/vim-vinegar](https://github.com/tpope/vim-vinegar)
 
