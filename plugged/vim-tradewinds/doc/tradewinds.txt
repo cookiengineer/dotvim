@@ -166,13 +166,24 @@ instance,
 <
 If you want full control, make your own mappings
 >
-    nnoremap <leader>h <plug>(tradewinds-h)
-    nnoremap <leader>j <plug>(tradewinds-j)
-    nnoremap <leader>k <plug>(tradewinds-k)
-    nnoremap <leader>l <plug>(tradewinds-l)
+    nmap <leader>h <plug>(tradewinds-h)
+    nmap <leader>j <plug>(tradewinds-j)
+    nmap <leader>k <plug>(tradewinds-k)
+    nmap <leader>l <plug>(tradewinds-l)
 <
 trade winds won't try to make its usual maps if you have made your own,
 and it wont step on your existing maps.
+
+                                                        *TradewindsMove*
+Alternatively, you can make maps which use the `TradewindsMove` command:
+>
+    let g:tradewinds_no_maps = 1
+
+    nnoremap <silent> <c-w>g<left>  :TradewindsMove h<cr>
+    nnoremap <silent> <c-w>g<down>  :TradewindsMove j<cr>
+    nnoremap <silent> <c-w>g<up>    :TradewindsMove k<cr>
+    nnoremap <silent> <c-w>g<right> :TradewindsMove l<cr>
+<
 
 ==============================================================================
 CUSTOMIZATION                                        *tradewinds-customization*

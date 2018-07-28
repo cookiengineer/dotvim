@@ -1,4 +1,3 @@
-call ale#Set('wrap_command_as_one_argument', 0)
 " Author: w0rp <devw0rp@gmail.com>
 " Description: Linter registration and lazy-loading
 "   Retrieves linters as requested by the engine, loading them if needed.
@@ -47,20 +46,30 @@ function! ale#linter#Reset() abort
     let s:linters = {}
 endfunction
 
+" Return a reference to the linters loaded.
+" This is only for tests.
+" Do not call this function.
+function! ale#linter#GetLintersLoaded() abort
+    " This command will throw from the sandbox.
+    let &equalprg=&equalprg
+
+    return s:linters
+endfunction
+
 function! s:IsCallback(value) abort
-    return type(a:value) == type('') || type(a:value) == type(function('type'))
+    return type(a:value) is v:t_string || type(a:value) is v:t_func
 endfunction
 
 function! s:IsBoolean(value) abort
-    return type(a:value) == type(0) && (a:value == 0 || a:value == 1)
+    return type(a:value) is v:t_number && (a:value == 0 || a:value == 1)
 endfunction
 
 function! s:LanguageGetter(buffer) dict abort
     return l:self.language
 endfunction
 
-function! ale#linter#PreProcess(linter) abort
-    if type(a:linter) != type({})
+function! ale#linter#PreProcess(filetype, linter) abort
+    if type(a:linter) isnot v:t_dict
         throw 'The linter object must be a Dictionary'
     endif
 
@@ -70,7 +79,7 @@ function! ale#linter#PreProcess(linter) abort
     \   'lsp': get(a:linter, 'lsp', ''),
     \}
 
-    if type(l:obj.name) != type('')
+    if type(l:obj.name) isnot v:t_string
         throw '`name` must be defined to name the linter'
     endif
 
@@ -105,7 +114,7 @@ function! ale#linter#PreProcess(linter) abort
     elseif has_key(a:linter, 'executable')
         let l:obj.executable = a:linter.executable
 
-        if type(l:obj.executable) != type('')
+        if type(l:obj.executable) isnot v:t_string
             throw '`executable` must be a string if defined'
         endif
     else
@@ -121,7 +130,7 @@ function! ale#linter#PreProcess(linter) abort
     elseif has_key(a:linter, 'command_chain')
         let l:obj.command_chain = a:linter.command_chain
 
-        if type(l:obj.command_chain) != type([])
+        if type(l:obj.command_chain) isnot v:t_list
             throw '`command_chain` must be a List'
         endif
 
@@ -139,7 +148,7 @@ function! ale#linter#PreProcess(linter) abort
             endif
 
             if has_key(l:link, 'output_stream')
-                if type(l:link.output_stream) != type('')
+                if type(l:link.output_stream) isnot v:t_string
                 \|| index(['stdout', 'stderr', 'both'], l:link.output_stream) < 0
                     throw l:err_prefix . '`output_stream` flag must be '
                     \   . "'stdout', 'stderr', or 'both'"
@@ -161,7 +170,7 @@ function! ale#linter#PreProcess(linter) abort
     elseif has_key(a:linter, 'command')
         let l:obj.command = a:linter.command
 
-        if type(l:obj.command) != type('')
+        if type(l:obj.command) isnot v:t_string
             throw '`command` must be a string if defined'
         endif
     else
@@ -193,26 +202,27 @@ function! ale#linter#PreProcess(linter) abort
     endif
 
     if l:needs_lsp_details
-        if has_key(a:linter, 'language')
-            if has_key(a:linter, 'language_callback')
+        if has_key(a:linter, 'language_callback')
+            if has_key(a:linter, 'language')
                 throw 'Only one of `language` or `language_callback` '
                 \   . 'should be set'
             endif
 
-            let l:obj.language = get(a:linter, 'language')
-
-            if type(l:obj.language) != type('')
-                throw '`language` must be a string'
-            endif
-
-            " Make 'language_callback' return the 'language' value.
-            let l:obj.language_callback = function('s:LanguageGetter')
-        else
             let l:obj.language_callback = get(a:linter, 'language_callback')
 
             if !s:IsCallback(l:obj.language_callback)
                 throw '`language_callback` must be a callback for LSP linters'
             endif
+        else
+            " Default to using the filetype as the language.
+            let l:obj.language = get(a:linter, 'language', a:filetype)
+
+            if type(l:obj.language) isnot v:t_string
+                throw '`language` must be a string'
+            endif
+
+            " Make 'language_callback' return the 'language' value.
+            let l:obj.language_callback = function('s:LanguageGetter')
         endif
 
         let l:obj.project_root_callback = get(a:linter, 'project_root_callback')
@@ -247,7 +257,7 @@ function! ale#linter#PreProcess(linter) abort
 
     let l:obj.output_stream = get(a:linter, 'output_stream', 'stdout')
 
-    if type(l:obj.output_stream) != type('')
+    if type(l:obj.output_stream) isnot v:t_string
     \|| index(['stdout', 'stderr', 'both'], l:obj.output_stream) < 0
         throw "`output_stream` must be 'stdout', 'stderr', or 'both'"
     endif
@@ -273,8 +283,8 @@ function! ale#linter#PreProcess(linter) abort
 
     let l:obj.aliases = get(a:linter, 'aliases', [])
 
-    if type(l:obj.aliases) != type([])
-    \|| len(filter(copy(l:obj.aliases), 'type(v:val) != type('''')')) > 0
+    if type(l:obj.aliases) isnot v:t_list
+    \|| len(filter(copy(l:obj.aliases), 'type(v:val) isnot v:t_string')) > 0
         throw '`aliases` must be a List of String values'
     endif
 
@@ -282,11 +292,14 @@ function! ale#linter#PreProcess(linter) abort
 endfunction
 
 function! ale#linter#Define(filetype, linter) abort
+    " This command will throw from the sandbox.
+    let &equalprg=&equalprg
+
     if !has_key(s:linters, a:filetype)
         let s:linters[a:filetype] = []
     endif
 
-    let l:new_linter = ale#linter#PreProcess(a:linter)
+    let l:new_linter = ale#linter#PreProcess(a:filetype, a:linter)
 
     call add(s:linters[a:filetype], l:new_linter)
 endfunction
@@ -297,6 +310,12 @@ function! ale#linter#PreventLoading(filetype) abort
 endfunction
 
 function! ale#linter#GetAll(filetypes) abort
+    " Don't return linters in the sandbox.
+    " Otherwise a sandboxed script could modify them.
+    if ale#util#InSandbox()
+        return []
+    endif
+
     let l:combined_linters = []
 
     for l:filetype in a:filetypes
@@ -317,7 +336,7 @@ function! s:GetAliasedFiletype(original_filetype) abort
     let l:buffer_aliases = get(b:, 'ale_linter_aliases', {})
 
     " b:ale_linter_aliases can be set to a List.
-    if type(l:buffer_aliases) is type([])
+    if type(l:buffer_aliases) is v:t_list
         return l:buffer_aliases
     endif
 
@@ -341,7 +360,7 @@ endfunction
 function! ale#linter#ResolveFiletype(original_filetype) abort
     let l:filetype = s:GetAliasedFiletype(a:original_filetype)
 
-    if type(l:filetype) != type([])
+    if type(l:filetype) isnot v:t_list
         return [l:filetype]
     endif
 
@@ -357,7 +376,7 @@ function! s:GetLinterNames(original_filetype) abort
     endif
 
     " b:ale_linters can be set to a List.
-    if type(l:buffer_ale_linters) is type([])
+    if type(l:buffer_ale_linters) is v:t_list
         return l:buffer_ale_linters
     endif
 
@@ -395,9 +414,9 @@ function! ale#linter#Get(original_filetypes) abort
         let l:all_linters = ale#linter#GetAll(l:filetype)
         let l:filetype_linters = []
 
-        if type(l:linter_names) == type('') && l:linter_names is# 'all'
+        if type(l:linter_names) is v:t_string && l:linter_names is# 'all'
             let l:filetype_linters = l:all_linters
-        elseif type(l:linter_names) == type([])
+        elseif type(l:linter_names) is v:t_list
             " Select only the linters we or the user has specified.
             for l:linter in l:all_linters
                 let l:name_list = [l:linter.name] + l:linter.aliases

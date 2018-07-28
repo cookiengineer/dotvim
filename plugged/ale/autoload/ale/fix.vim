@@ -1,10 +1,3 @@
-" This global Dictionary tracks the ALE fix data for jobs, etc.
-" This Dictionary should not be accessed outside of the plugin. It is only
-" global so it can be modified in Vader tests.
-if !has_key(g:, 'ale_fix_buffer_data')
-    let g:ale_fix_buffer_data = {}
-endif
-
 if !has_key(s:, 'job_info_map')
     let s:job_info_map = {}
 endif
@@ -219,6 +212,7 @@ function! s:RunJob(options) abort
 
     let [l:temporary_file, l:command] = ale#command#FormatCommand(
     \   l:buffer,
+    \   '',
     \   l:command,
     \   l:read_buffer,
     \)
@@ -281,7 +275,7 @@ function! s:RunJob(options) abort
     if get(g:, 'ale_run_synchronously') == 1
         " Run a command synchronously if this test option is set.
         let l:output = systemlist(
-        \   type(l:command) == type([])
+        \   type(l:command) is v:t_list
         \   ?  join(l:command[0:1]) . ' ' . ale#Escape(l:command[2])
         \   : l:command
         \)
@@ -319,10 +313,10 @@ function! s:RunFixer(options) abort
             \   : call(l:Function, [l:buffer, copy(l:input)])
         endif
 
-        if type(l:result) == type(0) && l:result == 0
+        if type(l:result) is v:t_number && l:result == 0
             " When `0` is returned, skip this item.
             let l:index += 1
-        elseif type(l:result) == type([])
+        elseif type(l:result) is v:t_list
             let l:input = l:result
             let l:index += 1
         else
@@ -357,9 +351,9 @@ function! s:RunFixer(options) abort
 endfunction
 
 function! s:AddSubCallbacks(full_list, callbacks) abort
-    if type(a:callbacks) == type('')
+    if type(a:callbacks) is v:t_string
         call add(a:full_list, a:callbacks)
-    elseif type(a:callbacks) == type([])
+    elseif type(a:callbacks) is v:t_list
         call extend(a:full_list, a:callbacks)
     else
         return 0
@@ -371,7 +365,7 @@ endfunction
 function! s:GetCallbacks(buffer, fixers) abort
     if len(a:fixers)
         let l:callback_list = a:fixers
-    elseif type(get(b:, 'ale_fixers')) is type([])
+    elseif type(get(b:, 'ale_fixers')) is v:t_list
         " Lists can be used for buffer-local variables only
         let l:callback_list = b:ale_fixers
     else
@@ -402,7 +396,7 @@ function! s:GetCallbacks(buffer, fixers) abort
     " Variables with capital characters are needed, or Vim will complain about
     " funcref variables.
     for l:Item in l:callback_list
-        if type(l:Item) == type('')
+        if type(l:Item) is v:t_string
             let l:Func = ale#fix#registry#GetFunc(l:Item)
 
             if !empty(l:Func)
@@ -426,9 +420,7 @@ function! ale#fix#InitBufferData(buffer, fixing_flag) abort
     " The 'done' flag tells the function for applying changes when fixing
     " is complete.
     let g:ale_fix_buffer_data[a:buffer] = {
-    \   'vars': getbufvar(a:buffer, ''),
     \   'lines_before': getbufline(a:buffer, 1, '$'),
-    \   'filename': expand('#' . a:buffer . ':p'),
     \   'done': 0,
     \   'should_save': a:fixing_flag is# 'save_file',
     \   'temporary_directory_list': [],
