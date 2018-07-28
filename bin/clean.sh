@@ -2,12 +2,8 @@
 
 # plugged/ale
 
-rm ./plugged/ale/CODE_OF_CONDUCT.md;
-rm ./plugged/ale/CONTRIBUTING.md;
 rm ./plugged/ale/Dockerfile;
-rm ./plugged/ale/ISSUE_TEMPLATE.md;
 rm ./plugged/ale/LICENSE;
-rm ./plugged/ale/PULL_REQUEST_TEMPLATE.md;
 rm ./plugged/ale/README.md;
 rm ./plugged/ale/run-tests;
 rm ./plugged/ale/run-tests.bat;
@@ -18,6 +14,7 @@ rm ./plugged/ale/.travis.yml;
 rm -rf ./plugged/ale/img;
 rm -rf ./plugged/ale/test;
 rm -rf ./plugged/ale/.git;
+rm -rf ./plugged/ale/.github;
 
 
 
