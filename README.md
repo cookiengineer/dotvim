@@ -82,5 +82,4 @@ The templates are defined in [templates.vim](./templates.vim)
 - [vim-utils/vim-man](https://github.com/vim-utils/vim-man)
 - [matze/vim-move](https://github.com/matze/vim-move)
 - [andymass/vim-tradewinds](https://github.com/andymass/vim-tradewinds)
-- [tpope/vim-vinegar](https://github.com/tpope/vim-vinegar)
 

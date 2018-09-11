@@ -76,11 +76,5 @@ rm -rf ./plugged/vim-move/.git;
 
 rm ./plugged/vim-tradewinds/LICENSE.md;
 rm ./plugged/vim-tradewinds/README.md;
-
-
-# plugged/vim-vinegar
-
-rm ./plugged/vim-vinegar/CONTRIBUTING.markdown;
-rm ./plugged/vim-vinegar/README.markdown;
-rm -rf ./plugged/vim-vinegar/.git;
+rm -rf ./plugged/vim-tradewinds/.git;
 

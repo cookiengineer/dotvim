@@ -61,5 +61,4 @@ Plugin 'sgur/vim-editorconfig'
 Plugin 'vim-utils/vim-man'
 Plugin 'matze/vim-move'
 Plugin 'andymass/vim-tradewinds'
-Plugin 'tpope/vim-vinegar'
 
