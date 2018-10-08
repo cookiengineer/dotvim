@@ -40,6 +40,8 @@ Now go ahead and enjoy responsibly.
 
 - `BufWritePre` removes trailing whitespaces
 - `BufWritePre` and `FileWritePre` creates non-existing folder paths
+- `FileChangedRO`, `FileChangedShell`, `FileChangedShellPost` have been modified to echo the warning instead of an annoying shell
+
 
 **Key Bindings / All Modes**
 
@@ -55,6 +57,9 @@ All key bindings are defined in [mappings.vim](./mappings.vim).
 - `[Ctrl] + [W], [C]` closes tab
 - `[Ctrl] + [W], [G], [Arrow Key]` moves current window
 - `[Ctrl] + [W], [G], [H/J/K/L]` moves current window
+- `[Ctrl] + [Arrow Up]` or `[Ctrl] + [K]` moves to previous linting error.
+- `[Ctrl] + [Arrow Down]` or `[Ctrl] + [J]` moves to next linting error.
+
 
 **Key Bindings / Visual Mode**
 

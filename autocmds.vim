@@ -36,3 +36,7 @@ autocmd BufWritePre *.sh :call <SID>AutoStripWhitespaces()
 autocmd BufWritePre *.xml :call <SID>AutoStripWhitespaces()
 autocmd BufWritePre,FileWritePre * :call <SID>AutoMakeDirectory()
 
+autocmd FileChangedRO        * echohl WarningMsg | echo "File changed to be read-only."  | echohl none
+autocmd FileChangedShell     * echohl WarningMsg | echo "File changed by other process." | echohl none
+autocmd FileChangedShellPost * echohl WarningMsg | echo "File changed by other process." | echohl none
+
