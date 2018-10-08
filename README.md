@@ -21,7 +21,7 @@ If you want this VIM config, do this in your Terminal:
 mv ~/.vim   ~/.vim__NOTSOAWESOME;
 mv ~/.vimrc ~/.vimrc__NOTSOAWESOME;
 
-git clone https://github.com/cookiengineer/.vim ~/.vim;
+git clone https://github.com/cookiengineer/dotvim ~/.vim;
 ln -s ~/.vim/.vimrc ~/.vimrc;
 ```
 
