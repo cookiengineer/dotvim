@@ -55,9 +55,9 @@ endfunction
 call zen#init()
 Plugin 'w0rp/ale'
 Plugin 'ervandew/supertab'
-Plugin 'vim-airline/vim-airline'
 Plugin 'djoshea/vim-autoread'
 Plugin 'sgur/vim-editorconfig'
+Plugin 'itchyny/lightline.vim'
 Plugin 'vim-utils/vim-man'
 Plugin 'matze/vim-move'
 Plugin 'andymass/vim-tradewinds'

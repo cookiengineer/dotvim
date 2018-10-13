@@ -165,7 +165,7 @@ function! zen#install() abort
         let l:plugin = g:plugins[key]
         let l:install_path = s:installation_path . "/" . l:plugin['name']
         if !isdirectory(l:install_path)
-            let l:cmd = "git clone --depth=1 " . l:plugin['remote'] . " " . l:install_path 
+            let l:cmd = "git clone --depth=1 " . l:plugin['remote'] . " " . l:install_path
             call add(l:plugins_to_install, l:cmd)
         else
             call setline(l:count, '[-] ' . l:plugin['name'] . ': ' . 'Already installed.')
