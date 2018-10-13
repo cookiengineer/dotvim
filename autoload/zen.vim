@@ -1,3 +1,10 @@
+" ==========================================================
+" Name:         vim-zen: Vim plugin manager
+" Maintainer:   Danish Prakash
+" HomePage:     https://github.com/prakashdanish/vim-zen
+" Version:      1.0.0
+" ==========================================================
+
 
 function! zen#init() abort
     let s:zen_win = 0
@@ -85,6 +92,9 @@ endfunction
 " source plugin files
 function! s:load_plugin(plugin) abort
     let l:plugin_path = g:plugins[a:plugin]['path']
+    if has_key(g:plugins[a:plugin], 'rtp')
+        let l:plugin_path = l:plugin_path . '/' . g:plugins[a:plugin]['rtp']
+    endif
     let l:patterns = ['plugin/**/*.vim', 'after/plugin/**/*.vim']
     for pattern in l:patterns
         for vimfile in split(globpath(l:plugin_path, pattern), '\n')
@@ -105,6 +115,7 @@ endfunction
 
 " load `g:plugins` with plugins in .vimrc
 function! zen#add(remote, ...)
+    let l:local = 0
     let l:plugin_name = split(a:remote, '/')[-1]
     let l:plugin_dir = s:installation_path . '/' . l:plugin_name 
 
@@ -113,6 +124,10 @@ function! zen#add(remote, ...)
 	elseif a:remote =~ '^http:\/\/.\+'
 		let l:remote_name = a:remote
 		let l:remote_name = substitute(l:remote, '^http:\/\/.\+', 'https://', '')
+    elseif isdirectory(a:remote)
+        let l:local = 1
+        let l:remote_name = a:remote
+        let l:plugin_dir = a:remote
 	elseif a:remote =~ '^.\+/.\+'
         let l:remote_name = 'https://github.com/' . a:remote . '.git'
 	else
@@ -120,13 +135,21 @@ function! zen#add(remote, ...)
     endif
 
     let g:plugins[l:plugin_name] = {'name': l:plugin_name, 'remote': l:remote_name, 'path': l:plugin_dir}
+
+    if a:0 > 0
+        call extend(g:plugins[l:plugin_name], a:1)
+        if has_key(a:000[0], 'rtp')
+            let l:plugin_dir = l:plugin_dir . '/' . a:000[0]['rtp']
+            let g:plugins[l:plugin_name]['path'] = l:plugin_dir 
+        endif
+    endif
+
+    if l:local
+        let g:plugins[l:plugin_name]['local'] = l:local
+    endif
+
     execute "set rtp+=" . l:plugin_dir 
     call add(g:plugin_names, l:plugin_name)
-
-    " TODO: add enable config
-    if a:0 == 1
-        let l:options = a:1
-    endif
 endfunction
 
 
@@ -155,7 +178,6 @@ endfunction
 
 " install plugins
 function! zen#install() abort
-    let l:count = 4
     let l:plugins_to_install = []
     let l:populate_window_message = 'Installation finished'
     call s:populate_window('Installing plugins...', 0)
@@ -164,13 +186,16 @@ function! zen#install() abort
     for key in keys(g:plugins)
         let l:plugin = g:plugins[key]
         let l:install_path = s:installation_path . "/" . l:plugin['name']
-        if !isdirectory(l:install_path)
-            let l:cmd = "git clone --depth=1 " . l:plugin['remote'] . " " . l:install_path
+        if has_key(g:plugins[key], 'local')
+            call s:load_plugin(key)
+            call setline(s:plugin_display_order[key], '[-] ' . key . ': ' . '[ MANAGED MANUALLY ]')
+            continue
+        elseif !isdirectory(l:install_path)
+            let l:cmd = "git clone --depth=1 --single-branch --branch=master " . l:plugin['remote'] . " " . l:install_path 
             call add(l:plugins_to_install, l:cmd)
         else
-            call setline(l:count, '[-] ' . l:plugin['name'] . ': ' . 'Already installed.')
+            call setline(s:plugin_display_order[g:plugins[key]['name']], '[-] ' . l:plugin['name'] . ': ' . 'Already installed.')
         endif
-        let l:count = l:count + 1
         redraw 
     endfor 
 
@@ -225,7 +250,6 @@ function! zen#remove() abort
         let l:plugin_dir_name = split(l:dir, '/')[-1]
         let l:plugin_dir_path = s:installation_path . "/" . l:plugin_dir_name 
         if !has_key(g:plugins, l:plugin_dir_name)
-            echom string(l:count)
             call add(l:unused_plugins, l:plugin_dir_path)
             call setline(l:count, '[ ] ' . l:plugin_dir_path)
             let l:count = l:count + 1
@@ -267,25 +291,30 @@ let py_exe = has('python') ? 'python' : 'python3'
 execute py_exe "<< EOF"
 import vim
 import time
-import Queue
 import commands
 import threading
 
+try:
+    import queue
+except ImportError:
+    import Queue as queue
+
 class ZenThread(threading.Thread):
-    def __init__(self, cmd, queue):
+    def __init__(self, cmd, queue, name=''):
         threading.Thread.__init__(self)
         self.cmd = cmd
         self.queue = queue 
+        self.name = name
 
     def run(self):
         (status, output) = commands.getstatusoutput(self.cmd)
-        self.queue.put((self.cmd, output, status))
+        self.queue.put((self.cmd, output, status, self.name))
 
 
 def install():
     count = 4
     thread_list = list()
-    result_queue = Queue.Queue()
+    result_queue = queue.Queue()
     plugins = vim.eval('g:plugins')
     path = vim.eval('s:installation_path')
     plugins_to_install = vim.eval('a:plugins_to_install')
@@ -311,7 +340,8 @@ def install():
 
     while threading.active_count() > 1 or not result_queue.empty():
         while not result_queue.empty():
-            (cmd, output, status) = result_queue.get()
+            # TODO: use name with queue
+            (cmd, output, status, name) = result_queue.get()
             plugin_name = cmd.split('/')[-1]
             if status == 0:
                 vim.eval('s:load_plugin("{}")'.format(plugin_name))
@@ -329,21 +359,24 @@ def install():
 def update():
     commands = list()
     git_cmd = 'git -C'
-    result_queue = Queue.Queue()
+    result_queue = queue.Queue()
     plugins = vim.eval('g:plugins') 
     populate_window_message = 'Finished installation'
     plugin_display_order = vim.eval('s:plugin_display_order')
     start_time = time.time()
 
     for key, value in plugins.items():
+        if value.get('local') == str(1):
+            vim.eval('setline({0}, "[-] {1}: {2}")'.format(plugin_display_order[key], key, '[ MANAGED MANUALLY ]'))
+            continue
         cmd = str(git_cmd + ' \"' + value['path'] + '\" pull')
-        thread = ZenThread(cmd, result_queue)
+        thread = ZenThread(cmd, result_queue, name=value.get('name'))
         thread.start()
 
     while threading.active_count() > 1 or not result_queue.empty():
         while not result_queue.empty():
-            (cmd, output, status) = result_queue.get()
-            plugin_name = cmd.split('/')[-1].split('"')[0]  # plugin name from git pull command
+            (cmd, output, status, name) = result_queue.get()
+            plugin_name = name
             if status == 0:
                 # TODO: add check if already updated or not update status_message accordingly (+, -)
                 vim.eval('s:load_plugin("{}")'.format(plugin_name))
