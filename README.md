@@ -25,8 +25,12 @@ git clone https://github.com/cookiengineer/dotvim ~/.vim;
 ln -s ~/.vim/.vimrc ~/.vimrc;
 ```
 
-Afterwards, start `vim` and execute `:ZenInstall` and `:ZenUpdate`.
-Now go ahead and enjoy responsibly.
+The plugins are contained in [./plugged](./plugged) and are
+statically shipped in this repository (for the sake of having
+a known-to-work-failsafe history).
+
+For details on plugins and how to update, read **Plugins**
+and **Updates** respectively down below.
 
 
 ## Usage
@@ -40,9 +44,9 @@ Now go ahead and enjoy responsibly.
 
 Auto commands are defined in [autocmds.vim](./autocmds.vim).
 
-- `BufWritePre` removes trailing whitespaces
-- `BufWritePre` and `FileWritePre` creates non-existing folder paths
-- `FileChangedRO`, `FileChangedShell`, `FileChangedShellPost` have been modified to echo the warning instead of opening an annoying shell
+- `BufWritePre` removes trailing whitespaces.
+- `BufWritePre` and `FileWritePre` creates non-existing parent folder paths via `mkdir -p`.
+- `FileChangedRO`, `FileChangedShell`, `FileChangedShellPost` have been modified to echo the warning instead of opening an annoying shell.
 
 
 ### Manual Commands
@@ -67,7 +71,7 @@ those that do are defined in the `settings.<plugin-name>.vim` file.
 - `[Ctrl] + [E], [V]` creates a new tab.
 - `[Ctrl] + [E], [C]` closes the current tab.
 - `[Ctrl] + [E], [Arrow Key]` moves focus to different tab.
-- `[Ctrl] + [E], [H/J/K/L]` moves focus to different tab.
+- `[Ctrl] + [E], [H/L]` moves focus to different tab.
 
 **Window/Buffer Navigation**
 
