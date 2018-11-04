@@ -24,6 +24,11 @@ function! ToggleNetRW()
 
 endfunction
 
+" Rebind <F1> inside NetRW Buffer
+function! FixNetRWMapping()
+	noremap <buffer> <F1> :call ToggleNetRW()<CR>
+endfunction
+
 
 
 " Toggle Window Zoom
@@ -63,6 +68,8 @@ endfunction
 
 
 " Function Key Bindings
+nmap <F1> :echo<CR>
+imap <F1> <C-o>:echo<CR>
 nnoremap <silent> <F1> :call ToggleNetRW()<CR>
 nnoremap <silent> <F2> :nohl<CR>
 nnoremap <silent> <F3> mzgg=G'z
@@ -70,9 +77,25 @@ nnoremap <silent> <F3> mzgg=G'z
 " Zoom/Unzoom Window
 nnoremap <silent> + :call ToggleZoom()<CR>
 
+" Tab Navigation
+nmap <C-t> :echo<CR>
+nnoremap <silent> <C-e>s :tabnew<CR>
+nnoremap <silent> <C-e>v :tabnew<CR>
+nnoremap <silent> <C-e>c :tabclose<CR>
+nnoremap <silent> <C-e><left> :tabprevious<CR>
+nnoremap <silent> <C-e>h :tabprevious<CR>
+nnoremap <silent> <C-e><right> :tabnext<CR>
+nnoremap <silent> <C-e>l :tabnext<CR>
+
 " Auto Format bad indent of copy/paste
 nnoremap p p=`]
 
 " Special Commands
 command W w !sudo tee % > /dev/null
+
+" Special Buffers
+augroup netrw_mapping
+	autocmd!
+	autocmd filetype netrw call FixNetRWMapping()
+augroup END
 

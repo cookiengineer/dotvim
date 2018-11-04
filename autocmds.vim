@@ -32,8 +32,10 @@ endfun
 autocmd BufWritePre *.htm :call <SID>AutoStripWhitespaces()
 autocmd BufWritePre *.html :call <SID>AutoStripWhitespaces()
 autocmd BufWritePre *.js :call <SID>AutoStripWhitespaces()
+autocmd BufWritePre *.mjs :call <SID>AutoStripWhitespaces()
 autocmd BufWritePre *.sh :call <SID>AutoStripWhitespaces()
 autocmd BufWritePre *.xml :call <SID>AutoStripWhitespaces()
+autocmd BufWritePre *.vim :call <SID>AutoStripWhitespaces()
 autocmd BufWritePre,FileWritePre * :call <SID>AutoMakeDirectory()
 
 autocmd FileChangedRO        * echohl WarningMsg | echo "File changed to be read-only."  | echohl none
