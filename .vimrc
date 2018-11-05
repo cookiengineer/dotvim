@@ -35,6 +35,14 @@ endif
 
 
 
+" (Modern) Clipboard Copy/Paste support
+
+if has('unnamedplus')
+	set clipboard=unnamed,unnamedplus
+endif
+
+
+
 " (Legacy) Terminal Copy/Paste support
 
 let &t_SI .= "\<Esc>[?2004h"
