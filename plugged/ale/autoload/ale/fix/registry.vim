@@ -56,7 +56,7 @@ let s:default_registry = {
 \   },
 \   'prettier': {
 \       'function': 'ale#fixers#prettier#Fix',
-\       'suggested_filetypes': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'json5', 'graphql', 'markdown', 'vue'],
+\       'suggested_filetypes': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'json5', 'graphql', 'markdown', 'vue', 'html', 'yaml'],
 \       'description': 'Apply prettier to a file.',
 \   },
 \   'prettier_eslint': {
@@ -249,6 +249,11 @@ let s:default_registry = {
 \       'function': 'ale#fixers#uncrustify#Fix',
 \       'suggested_filetypes': ['c', 'cpp', 'cs', 'objc', 'objcpp', 'd', 'java', 'p', 'vala' ],
 \       'description': 'Fix C, C++, C#, ObjectiveC, ObjectiveC++, D, Java, Pawn, and VALA files with uncrustify.',
+\   },
+\   'terraform': {
+\       'function': 'ale#fixers#terraform#Fix',
+\       'suggested_filetypes': ['hcl', 'terraform'],
+\       'description': 'Fix tf and hcl files with terraform fmt.',
 \   },
 \}
 

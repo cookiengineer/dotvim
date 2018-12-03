@@ -112,6 +112,9 @@ let g:ale_echo_cursor = get(g:, 'ale_echo_cursor', 1)
 " This flag can be set to 1 to automatically show errors in the preview window.
 let g:ale_cursor_detail = get(g:, 'ale_cursor_detail', 0)
 
+" This flag can be set to 1 to enable virtual text when the cursor moves.
+let g:ale_virtualtext_cursor = get(g:, 'ale_virtualtext_cursor', 0)
+
 " This flag can be set to 1 to automatically close the preview window upon
 " entering Insert Mode.
 let g:ale_close_preview_on_insert = get(g:, 'ale_close_preview_on_insert', 0)
@@ -193,6 +196,9 @@ command! -bar ALEFindReferences :call ale#references#Find()
 " Get information for the cursor.
 command! -bar ALEHover :call ale#hover#Show(bufnr(''), getcurpos()[1],
                                             \ getcurpos()[2], {})
+
+" Search for appearances of a symbol, such as a type name or function name.
+command! -nargs=1 ALESymbolSearch :call ale#symbol#Search(<q-args>)
 
 " <Plug> mappings for commands
 nnoremap <silent> <Plug>(ale_previous) :ALEPrevious<Return>
