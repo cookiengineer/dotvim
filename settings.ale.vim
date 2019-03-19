@@ -1,6 +1,8 @@
 
 " set statusline+=%#warningmsg#
 
+let g:ale_linters = { 'javascript': [ 'eslint' ] }
+
 if filereadable(".eslintrc")
 	let g:ale_linters = { 'javascript': [ 'eslint' ] }
 endif

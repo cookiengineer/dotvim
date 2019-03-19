@@ -84,8 +84,8 @@ those that do are defined in the `settings.<plugin-name>.vim` file.
 
 Additional Bindings are defined in [settings.tradewinds.vim](./settings.tradewinds.vim).
 
-- `[Ctrl] + [W], [G], [Arrow Key]` moves the current window.
-- `[Ctrl] + [W], [G], [H/J/K/L]` moves the current window.
+- `[Shift] + [W], [Arrow Key]` moves the current window.
+- `[Shift] + [W], [H/J/K/L]` moves the current window.
 
 **Error Navigation**
 
