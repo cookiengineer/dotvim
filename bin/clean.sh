@@ -7,6 +7,7 @@ rm ./plugged/ale/LICENSE;
 rm ./plugged/ale/README.md;
 rm ./plugged/ale/run-tests;
 rm ./plugged/ale/run-tests.bat;
+rm ./plugged/ale/supported-tools.md;
 rm ./plugged/ale/.appveyor.yml;
 rm ./plugged/ale/.gitattributes;
 rm ./plugged/ale/.gitignore;
