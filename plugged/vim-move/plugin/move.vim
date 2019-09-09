@@ -30,6 +30,21 @@ function! s:ResetCursor()
     normal! gv=gv^
 endfunction
 
+function! s:SaveDefaultRegister()
+   let s:default_register_value = @"
+endfunction
+
+function! s:RestoreDefaultRegister()
+   let @" = s:default_register_value
+endfunction
+
+function! s:GetRelativeCursorVirtCol()
+    let l:cursor_col = virtcol('.')
+    silent normal! ^
+    " cursor position relative line start taking into account of indentations
+    return l:cursor_col - virtcol('.') + 1
+endfunction
+
 function! s:MoveBlockDown(start, end, count)
     if !&modifiable
         return
@@ -79,72 +94,118 @@ function! s:MoveBlockUp(start, end, count)
 endfunction
 
 function! s:MoveBlockLeft() range
-    if !&modifiable
+    let l:min_col = min([virtcol("'<"), virtcol("'>")])
+
+    if !&modifiable || virtcol("$") == 1 || l:min_col == 1 || visualmode() ==# "V"
+        normal! gv
         return
     endif
 
-    if visualmode() ==# "\<C-v>"
-        echomsg 'MoveBlockLeft can only be used in visual block'
+    if visualmode() ==# "v" && a:lastline - a:firstline > 0
+        execute "silent normal! gv\<C-v>"
+        echomsg "Switching to visual block mode for moving multiple lines with MoveBlockLeft"
+        return
     endif
 
-    let l:distance = v:count ? v:count : 1
+    let l:distance = min([l:min_col - 1, v:count ? v:count : 1])
 
-    let l:min_col = min([col("'<"), col("'>")])
+    if l:distance < 1
+        normal! gv
+        return
+    endif
 
     let [l:old_virtualedit, &virtualedit] = [&virtualedit, 'onemore']
-    if l:min_col - l:distance <= 1
-        execute "silent normal! gvd0P`[\<C-v>`]"
-    else
-        execute 'silent normal! gvd' . l:distance . "hP`[\<C-v>`]"
+    call s:SaveDefaultRegister()
+
+    " save previous cursor position
+    silent normal! gv
+    let l:row_pos = getcurpos()[1]
+    let l:is_rhs = virtcol(".") == max([virtcol("'<"), virtcol("'>")])
+
+    execute 'silent normal! gvd' . l:distance . "hP`[\<C-v>`]"
+
+    " restore previous cursor position
+    if getcurpos()[1] != l:row_pos
+        silent normal! o
+        if l:is_rhs
+           silent normal! O
+        endif
+    elseif !l:is_rhs
+        silent normal! O
     endif
 
+    call s:RestoreDefaultRegister()
     let &virtualedit = l:old_virtualedit
 endfunction
 
 function! s:MoveBlockRight() range
-    if !&modifiable
+    if !&modifiable || virtcol("$") == 1
+        normal! gv
         return
     endif
 
-    if visualmode() ==# "\<C-v>"
-        echomsg 'MoveBlockLeft can only be used in visual block'
+    if visualmode() ==# "V"
+        execute "silent normal! gv\<C-v>o0o$h"
+        echomsg "Switching to visual block mode for moving whole line(s) with MoveBlockRight"
+        return
+    endif
+
+    if visualmode() ==# "v" && a:lastline - a:firstline > 0
+        execute "silent normal! gv\<C-v>"
+        echomsg "Switching to visual block mode for moving multiple lines with MoveBlockRight"
+        return
     endif
 
     let l:distance = v:count ? v:count : 1
 
-    let l:lens = map(getline(a:firstline, a:lastline), 'len(v:val)')
-    let [l:shorter_line_len, l:longer_line_len] = [min(l:lens), max(l:lens)]
-
-    let l:are_same_lines = col("'<") == col("'>")
-    let l:max_col        = max([col("'<"), col("'>")])
+    let l:lens = map(getline(a:firstline, a:lastline), 'strwidth(v:val)')
+    let l:shorter_line_len = min(l:lens)
+    let l:max_col = max([virtcol("'<"), virtcol("'>")])
 
     if !g:move_past_end_of_line && (l:max_col + l:distance >= l:shorter_line_len)
         let l:distance = l:shorter_line_len - l:max_col
 
-        if l:distance == 0
+        if l:distance <= 0
             silent normal! gv
             return
         endif
     endif
 
     let [l:old_virtualedit, &virtualedit] = [&virtualedit, 'all']
-    execute 'silent normal! gvd' . l:distance . "lP`[\<C-v>`]"
+    call s:SaveDefaultRegister()
 
-    " Very strange things happen with 'virtualedit' set to all. One of the is that
-    " the selection loses one column at the left at reselection.
-    " The next line fixes it
-    if !l:are_same_lines && (l:max_col + l:distance < l:longer_line_len)
-        normal! oho
+    " save previous cursor position
+    silent normal! gv
+    let l:row_pos = getcurpos()[1]
+    let l:is_rhs = virtcol(".") == l:max_col
+
+    execute 'silent normal! gvd' . l:distance . "l"
+    " P behaves inconsistently in virtualedit 'all' mode; sometimes the cursor
+    " moves one right after pasting, other times it doesn't. This makes it
+    " difficult to rely on `[ to determine the start of the shifted selection.
+    let l:new_start_pos = virtcol(".")
+    execute 'silent normal! P' . l:new_start_pos . "|\<C-v>`]"
+
+    " restore previous cursor position
+    if getcurpos()[1] != l:row_pos
+        silent normal! o
+        if l:is_rhs
+           silent normal! O
+        endif
+    elseif !l:is_rhs
+        silent normal! O
     endif
 
-   let &virtualedit = l:old_virtualedit
+    call s:RestoreDefaultRegister()
+    let &virtualedit = l:old_virtualedit
 endfunction
 
 function! s:MoveLineUp(count) range
-    if !&modifiable
+    if !&modifiable || line('.') == 1
         return
     endif
 
+    let l:relative_cursor_col = s:GetRelativeCursorVirtCol()
     let l:distance = a:count + 1
 
     if v:count > 0
@@ -164,13 +225,17 @@ function! s:MoveLineUp(count) range
     if (g:move_auto_indent == 1)
         normal! ==
     endif
+
+    " restore cursor column position
+    execute 'silent normal!' . max([1, (virtcol('.') + l:relative_cursor_col - 1)]) . '|'
 endfunction
 
 function! s:MoveLineDown(count) range
-    if !&modifiable
+    if !&modifiable || line('.') ==  line('$')
         return
     endif
 
+    let l:relative_cursor_col = s:GetRelativeCursorVirtCol()
     let l:distance = a:count
 
     if v:count > 0
@@ -189,42 +254,50 @@ function! s:MoveLineDown(count) range
     if (g:move_auto_indent == 1)
         normal! ==
     endif
+
+    " restore cursor column position
+    execute 'silent normal!' . max([1, (virtcol('.') + l:relative_cursor_col - 1)]) . '|'
 endfunction
 
 " Using range here fucks the col() function (because col() always returns 1 in
 " range functions), so use normal function and clear the range with <C-u> later
 function! s:MoveCharLeft()
-    if !&modifiable
+    if !&modifiable || virtcol("$") == 1 || virtcol(".") == 1
         return
     endif
 
     let l:distance = v:count ? v:count : 1
 
-    if (col('.') - l:distance <= 0)
+    call s:SaveDefaultRegister()
+
+    if (virtcol('.') - l:distance <= 0)
         silent normal! x0P
-        return
+    else
+        let [l:old_virtualedit, &virtualedit] = [&virtualedit, 'onemore']
+        execute 'silent normal! x' . l:distance . 'hP'
+        let &virtualedit = l:old_virtualedit
     endif
 
-    execute 'silent normal! x' . l:distance . 'hP'
+    call s:RestoreDefaultRegister()
 endfunction
 
 function! s:MoveCharRight()
-    if !&modifiable
+    if !&modifiable || virtcol("$") == 1
         return
     endif
 
     let l:distance = v:count ? v:count : 1
+    call s:SaveDefaultRegister()
 
-    if !g:move_past_end_of_line && (col('.') + l:distance >= col('$') - 1)
+    if !g:move_past_end_of_line && (virtcol('.') + l:distance >= virtcol('$') - 1)
         silent normal! x$p
-        return
+    else
+        let [l:old_virtualedit, &virtualedit] = [&virtualedit, 'all']
+        execute 'silent normal! x' . l:distance . 'lP'
+        let &virtualedit = l:old_virtualedit
     endif
 
-    let [l:old_virtualedit, &virtualedit] = [&virtualedit, 'all']
-
-    execute 'silent normal! x' . l:distance . 'lP'
-
-    let &virtualedit = l:old_virtualedit
+    call s:RestoreDefaultRegister()
 endfunction
 
 function! s:MoveBlockOneLineUp() range

@@ -31,7 +31,11 @@ function! tradewinds#softmove(dir) abort
 
   " get window in target direction instead of using
   " wincmd because sizes might change when splitting
-  let l:target = tradewinds#winindir#get(a:dir)
+  if has('patch-8.1.1140')
+    let l:target = winnr(a:dir)
+  else
+    let l:target = tradewinds#winindir#get(a:dir)
+  endif
 
   " allow the user to cancel
   if exists('g:tradewinds#prepare')
@@ -43,6 +47,7 @@ function! tradewinds#softmove(dir) abort
   " hard HJKL movements can be used here
   if l:target == 0 || l:target == winnr()
     execute 'wincmd' toupper(a:dir)
+    call s:AfterVoyage()
     return
   endif
 
@@ -112,6 +117,10 @@ function! tradewinds#softmove(dir) abort
     call win_gotoid(l:winid)
   endif
 
+  call s:AfterVoyage()
+endfunction
+
+function! s:AfterVoyage()
   if exists('#User#TradeWindsAfterVoyage')
     doautocmd <nomodeline> User TradeWindsAfterVoyage
   endif
