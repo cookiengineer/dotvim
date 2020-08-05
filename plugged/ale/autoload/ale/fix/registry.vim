@@ -54,6 +54,11 @@ let s:default_registry = {
 \       'description': 'Apply elm-format to a file.',
 \       'aliases': ['format'],
 \   },
+\   'nimpretty': {
+\       'function': 'ale#fixers#nimpretty#Fix',
+\       'suggested_filetypes': ['nim'],
+\       'description': 'Apply nimpretty to a file.',
+\   },
 \   'eslint': {
 \       'function': 'ale#fixers#eslint#Fix',
 \       'suggested_filetypes': ['javascript', 'typescript'],
@@ -155,6 +160,11 @@ let s:default_registry = {
 \       'suggested_filetypes': ['php'],
 \       'description': 'Fix PHP files with php-cs-fixer.',
 \   },
+\    'astyle': {
+\       'function': 'ale#fixers#astyle#Fix',
+\       'suggested_filetypes': ['c', 'cpp'],
+\       'description': 'Fix C/C++ with astyle.',
+\    },
 \   'clangtidy': {
 \       'function': 'ale#fixers#clangtidy#Fix',
 \       'suggested_filetypes': ['c', 'cpp', 'objc'],

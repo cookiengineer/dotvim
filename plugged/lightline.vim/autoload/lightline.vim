@@ -2,7 +2,7 @@
 " Filename: autoload/lightline.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2019/08/20 14:00:00.
+" Last Change: 2020/06/19 11:08:46.
 " =============================================================================
 
 let s:save_cpo = &cpo
@@ -11,34 +11,35 @@ set cpo&vim
 let s:_ = 1 " 1: uninitialized, 2: disabled
 
 function! lightline#update() abort
-  if &buftype ==# 'popup' | return | endif
+  if s:skip() | return | endif
   if s:_
     if s:_ == 2 | return | endif
     call lightline#init()
     call lightline#colorscheme()
   endif
-  if !s:lightline.enable.statusline
-    return
+  if s:lightline.enable.statusline
+    let w = winnr()
+    let s = winnr('$') == 1 && w > 0 ? [lightline#statusline(0)] : [lightline#statusline(0), lightline#statusline(1)]
+    for n in range(1, winnr('$'))
+      call setwinvar(n, '&statusline', s[n!=w])
+    endfor
   endif
-  let w = winnr()
-  let s = winnr('$') == 1 && w > 0 ? [lightline#statusline(0)] : [lightline#statusline(0), lightline#statusline(1)]
-  for n in range(1, winnr('$'))
-    call setwinvar(n, '&statusline', s[n!=w])
-    call setwinvar(n, 'lightline', n!=w)
-  endfor
 endfunction
 
-function! lightline#update_once() abort
-  if !exists('w:lightline') || w:lightline
-    call lightline#update()
-  endif
-endfunction
+if exists('*win_gettype')
+  function! s:skip() abort " Vim 8.2.0257 (00f3b4e007), 8.2.0991 (0fe937fd86), 8.2.0996 (40a019f157)
+    return win_gettype() ==# 'popup' || win_gettype() ==# 'autocmd'
+  endfunction
+else
+  function! s:skip() abort
+    return &buftype ==# 'popup'
+  endfunction
+endif
 
 function! lightline#update_disable() abort
-  if !s:lightline.enable.statusline
-    return
+  if s:lightline.enable.statusline
+    call setwinvar(0, '&statusline', '')
   endif
-  call setwinvar(0, '&statusline', '')
 endfunction
 
 function! lightline#enable() abort
@@ -46,14 +47,13 @@ function! lightline#enable() abort
   call lightline#update()
   augroup lightline
     autocmd!
-    autocmd WinEnter,BufEnter,SessionLoadPost * call lightline#update()
+    autocmd WinEnter,BufEnter,BufDelete,SessionLoadPost,FileChangedShellPost * call lightline#update()
     if !has('patch-8.1.1715')
       autocmd FileType qf call lightline#update()
     endif
     autocmd SessionLoadPost * call lightline#highlight()
     autocmd ColorScheme * if !has('vim_starting') || expand('<amatch>') !=# 'macvim'
           \ | call lightline#update() | call lightline#highlight() | endif
-    autocmd CursorMoved,BufUnload * call lightline#update_once()
   augroup END
   augroup lightline-disable
     autocmd!
@@ -198,13 +198,7 @@ function! lightline#colorscheme() abort
     let s:lightline.palette = g:lightline#colorscheme#{s:lightline.colorscheme}#palette
   finally
     if has('win32') && !has('gui_running') && &t_Co < 256
-      for u in values(s:lightline.palette)
-        for v in values(u)
-          for _  in v
-            let [_[2], _[3]] = [lightline#colortable#gui2cui(_[0], _[2]), lightline#colortable#gui2cui(_[1], _[3])]
-          endfor
-        endfor
-      endfor
+      call lightline#colortable#gui2cui_palette(s:lightline.palette)
     endif
     let s:highlight = {}
     call lightline#highlight('normal')
@@ -224,7 +218,7 @@ endfunction
 let s:mode = ''
 function! lightline#link(...) abort
   let mode = get(s:lightline._mode_, a:0 ? a:1 : mode(), 'normal')
-  if s:mode == mode
+  if s:mode ==# mode
     return ''
   endif
   let s:mode = mode
@@ -432,7 +426,7 @@ function! s:line(tabline, inactive) abort
     let _ .= i < l + len(lt) - len(l_) && ll[i] < l || ll[i] != ll[i + 1] ? p.left : len(lt[i]) ? s.left : ''
   endfor
   let _ .= '%#LightlineMiddle_' . mode . '#%='
-  for i in reverse(range(len(rt)))
+  for i in range(len(rt) - 1, 0, -1)
     let _ .= '%#LightlineRight_' . mode . '_' . rl[i] . '_' . rl[i + 1] . '#'
     let _ .= i < r + len(rt) - len(r_) && rl[i] < r || rl[i] != rl[i + 1] ? p.right : len(rt[i]) ? s.right : ''
     let _ .= '%#LightlineRight_' . mode . '_' . rl[i] . '#'
