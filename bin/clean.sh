@@ -22,6 +22,7 @@ rm -rf ./plugged/ale/.github;
 
 rm ./plugged/supertab/Makefile;
 rm ./plugged/supertab/README.rst;
+rm ./plugged/supertab/.gitignore;
 rm -rf ./plugged/supertab/.git;
 
 
@@ -35,6 +36,7 @@ rm -rf ./plugged/vim-autoread/.git;
 
 rm ./plugged/vim-editorconfig/LICENSE;
 rm ./plugged/vim-editorconfig/README.md;
+rm ./plugged/vim-editorconfig/.gitignore;
 rm -rf ./plugged/vim-editorconfig/.git;
 
 
@@ -42,32 +44,33 @@ rm -rf ./plugged/vim-editorconfig/.git;
 
 rm ./plugged/lightline.vim/LICENSE;
 rm ./plugged/lightline.vim/README.md;
+rm ./plugged/lightline.vim/.gitignore;
+rm ./plugged/lightline.vim/.travis.yml;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/16color.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/darcula.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/deus.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/jellybeans.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/landscape.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/material.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/materia.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/molokai.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/nord.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/OldHope.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/one.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/PaperColor_dark.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/PaperColor_light.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/PaperColor.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/seoul256.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/solarized.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/srcery_drk.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow_Night_Blue.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow_Night_Bright.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow_Night_Eighties.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow_Night.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow.vim;
+rm ./plugged/lightline.vim/autoload/lightline/colorscheme/wombat.vim;
 rm -rf ./plugged/lightline.vim/.git;
-rm -rf ./plugged/lightline.vim/.gitignore;
-rm -rf ./plugged/lightline.vim/.travis.yml;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/16color.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/darcula.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/deus.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/jellybeans.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/landscape.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/material.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/materia.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/molokai.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/nord.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/OldHope.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/one.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/PaperColor_dark.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/PaperColor_light.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/PaperColor.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/seoul256.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/solarized.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/srcery_drk.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow_Night_Blue.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow_Night_Bright.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow_Night_Eighties.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow_Night.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/wombat.vim;
+rm -rf ./plugged/lightline.vim/.github;
 rm -rf ./plugged/lightline.vim/test;
 
 
