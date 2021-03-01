@@ -88,7 +88,7 @@ nnoremap <silent> <C-e><right> :tabnext<CR>
 nnoremap <silent> <C-e>l :tabnext<CR>
 
 " Auto Format bad indent of copy/paste
-nnoremap p p=`]
+"nnoremap p p=`]
 
 " Special Commands
 command W w !sudo tee % > /dev/null
