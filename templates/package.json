@@ -1,0 +1,25 @@
+{
+	"name": "project",
+	"description": "Project 2021",
+	"private": true,
+	"version": "2021.0.0",
+	"module": "./project/index.mjs",
+	"bin": {
+		"project": "./project/project.mjs",
+		"library": "./library/other.mjs"
+	},
+	"scripts": {
+		"lint": "npx eslint ./project ./library",
+		"postinstall": "node ./project/make.mjs build",
+		"clean": "node ./project/make.mjs clean",
+		"build": "node ./project/make.mjs build"
+	},
+	"exports": {
+		".": "./project/index.mjs",
+		"./library": "./library/index.mjs",
+		"./project": "./project/index.mjs"
+	},
+	"devDependencies": {
+		"eslint": "^7.0.0"
+	}
+}

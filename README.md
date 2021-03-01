@@ -114,9 +114,13 @@ Additional Bindings are defined in [settings.move.vim](./settings.move.vim).
 
 The templates are defined in [templates.vim](./templates.vim)
 
-- `,definition` inserts the [lycheejs/definition.js](./templates/lycheejs/definition.js) template
-- `,index.html` inserts the [lycheejs/index.html](./templates/lycheejs/index.html) template
-- `,index.js` inserts the [lycheejs/index.js](./templates/lycheejs/index.js) template
+- `,css` inserts the [default.css](./templates/default.css) template
+- `,html` inserts the [default.html](./templates/default.html) template
+- `,mjs` inserts the [default.mjs](./templates/default.mjs) template
+
+- `,eslintrc` inserts the [eslintrc.json](./templates/eslintrc.json) template
+- `,make` inserts the [make.mjs](./templates/make.mjs) template
+- `,package` inserts the [package.json](./templates/package.json) template
 
 
 ## Plugins
