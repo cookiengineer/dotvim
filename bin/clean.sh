@@ -1,96 +1,73 @@
 #!/bin/bash
 
-# plugged/ale
-
-rm ./plugged/ale/Dockerfile;
-rm ./plugged/ale/LICENSE;
-rm ./plugged/ale/README.md;
-rm ./plugged/ale/run-tests;
-rm ./plugged/ale/run-tests.bat;
-rm ./plugged/ale/supported-tools.md;
-rm ./plugged/ale/.appveyor.yml;
-rm ./plugged/ale/.gitattributes;
-rm ./plugged/ale/.gitignore;
-rm ./plugged/ale/.travis.yml;
-rm -rf ./plugged/ale/img;
-rm -rf ./plugged/ale/test;
-rm -rf ./plugged/ale/.git;
-rm -rf ./plugged/ale/.github;
 
 
-# plugged/supertab
+# GIT Folders
 
-rm ./plugged/supertab/Makefile;
-rm ./plugged/supertab/README.rst;
-rm -rf ./plugged/supertab/.git;
+echo "> Removing Git Folders ...";
 
+rm -rf ./plugged/*/.git           2> /dev/null;
+rm -rf ./plugged/*/.gitattributes 2> /dev/null;
+rm -rf ./plugged/*/.gitignore     2> /dev/null;
+rm -rf ./plugged/*/.github        2> /dev/null;
 
-# plugged/vim-autoread
+# IDE Files
 
-rm ./plugged/vim-autoread/README.rst;
-rm -rf ./plugged/vim-autoread/.git;
+echo "> Removing IDE Files and Folders ...";
 
-
-# plugged/vim-editorconfig
-
-rm ./plugged/vim-editorconfig/LICENSE;
-rm ./plugged/vim-editorconfig/README.md;
-rm -rf ./plugged/vim-editorconfig/.git;
+rm ./plugged/*/.projections.json 2> /dev/null;
 
 
-# plugged/lightline.vim
+# Build Environment Files
 
-rm ./plugged/lightline.vim/LICENSE;
-rm ./plugged/lightline.vim/README.md;
-rm -rf ./plugged/lightline.vim/.git;
-rm -rf ./plugged/lightline.vim/.gitignore;
-rm -rf ./plugged/lightline.vim/.travis.yml;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/16color.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/darcula.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/deus.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/jellybeans.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/landscape.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/material.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/materia.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/molokai.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/nord.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/OldHope.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/one.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/PaperColor_dark.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/PaperColor_light.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/PaperColor.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/seoul256.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/solarized.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/srcery_drk.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow_Night_Blue.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow_Night_Bright.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow_Night_Eighties.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow_Night.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/Tomorrow.vim;
-rm -rf ./plugged/lightline.vim/autoload/lightline/colorscheme/wombat.vim;
-rm -rf ./plugged/lightline.vim/test;
+echo "> Removing Build Environment Files ...";
+
+rm -rf ./plugged/*/test       2> /dev/null;
+rm ./plugged/*/.appveyor.yml  2> /dev/null;
+rm ./plugged/*/.travis.yml    2> /dev/null;
+rm ./plugged/*/Dockerfile     2> /dev/null;
+
+# Meta Data
+
+echo "> Removing Meta Files ...";
+
+rm ./plugged/*/CHANGELOG     2> /dev/null;
+rm ./plugged/*/CHANGELOG.md  2> /dev/null;
+rm ./plugged/*/CHANGELOG.rst 2> /dev/null;
+rm ./plugged/*/CHANGELOG.txt 2> /dev/null;
+rm ./plugged/*/LICENSE       2> /dev/null;
+rm ./plugged/*/LICENSE.md    2> /dev/null;
+rm ./plugged/*/LICENSE.rst   2> /dev/null;
+rm ./plugged/*/LICENSE.txt   2> /dev/null;
+rm ./plugged/*/README        2> /dev/null;
+rm ./plugged/*/README.md     2> /dev/null;
+rm ./plugged/*/README.rst    2> /dev/null;
+rm ./plugged/*/README.txt    2> /dev/null;
 
 
-# plugged/vim-man
+echo "> Cleaning ale ...";
 
-rm ./plugged/vim-man/CHANGELOG.md;
-rm ./plugged/vim-man/README.md;
-rm ./plugged/vim-man/improvements.md;
-rm ./plugged/vim-man/.gitignore;
-rm -rf ./plugged/vim-man/.git;
-rm -rf ./plugged/vim-man/test;
+rm ./plugged/ale/run-tests          2> /dev/null;
+rm ./plugged/ale/run-tests.bat      2> /dev/null;
+rm ./plugged/ale/supported-tools.md 2> /dev/null;
+rm -rf ./plugged/ale/img            2> /dev/null;
 
 
-# plugged/vim-move
+echo "> Cleaning supertab ...";
 
-rm ./plugged/vim-move/LICENSE;
-rm ./plugged/vim-move/README.md;
-rm -rf ./plugged/vim-move/.git;
+rm ./plugged/supertab/Makefile 2> /dev/null;
 
 
-# plugged/vim-tradewinds
+echo "> Cleaning lightline.vim ...";
 
-rm ./plugged/vim-tradewinds/LICENSE.md;
-rm ./plugged/vim-tradewinds/README.md;
-rm -rf ./plugged/vim-tradewinds/.git;
+rm ./plugged/lightline.vim/colorscheme.md 2> /dev/null;
+
+
+echo "> Cleaning vim-man ...";
+
+rm ./plugged/vim-man/improvements.md 2> /dev/null;
+
+
+echo "Done";
+exit 0;
 

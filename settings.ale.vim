@@ -19,9 +19,6 @@ endif
 let g:ale_set_quickfix = 0
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 
-if filereadable("lychee.store") || filereadable("lychee.pkg")
-	let g:ale_linters = { 'javascript': [ 'strainer' ] }
-endif
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
