@@ -17,6 +17,7 @@ exe 'source' '~/.vim/autocmds.vim'
 
 
 " NeoVIM support
+
 if has('nvim')
 
 	let $NVIM_TUI_ENABLE_TRUE_COLOR=1
@@ -29,8 +30,28 @@ else
 
 endif
 
-if has('termguicolors')
-	set termguicolors
+
+
+" UXTerm, XTerm, Kitty, Mosh all have varying color support
+
+if $TERM == "xterm-kitty"
+
+	set t_Co=256
+
+	if has('termguicolors')
+		set termguicolors
+	endif
+
+elseif $TERM == "xterm-256color"
+
+	set t_Co=256
+	set notermguicolors
+
+elseif $TERM == "xterm"
+
+	set t_Co=256
+	set notermguicolors
+
 endif
 
 
