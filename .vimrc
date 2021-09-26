@@ -82,12 +82,13 @@ endfunction
 " Plugins
 
 call zen#init()
-Plugin 'w0rp/ale'
-Plugin 'ervandew/supertab'
-Plugin 'djoshea/vim-autoread'
-Plugin 'sgur/vim-editorconfig'
-Plugin 'itchyny/lightline.vim'
-Plugin 'vim-utils/vim-man'
-Plugin 'matze/vim-move'
-Plugin 'andymass/vim-tradewinds'
+Plugin 'https://github.com/w0rp/ale'
+Plugin 'https://github.com/ervandew/supertab'
+Plugin 'https://github.com/djoshea/vim-autoread'
+Plugin 'https://github.com/sgur/vim-editorconfig'
+Plugin 'https://github.com/itchyny/lightline.vim'
+Plugin 'https://github.com/jamessan/vim-gnupg'
+Plugin 'https://github.com/vim-utils/vim-man'
+Plugin 'https://github.com/matze/vim-move'
+Plugin 'https://github.com/andymass/vim-tradewinds'
 

@@ -15,6 +15,7 @@ rm -rf ./plugged/*/.github        2> /dev/null;
 echo "> Removing IDE Files and Folders ...";
 
 rm ./plugged/*/.projections.json 2> /dev/null;
+rm ./plugged/*/.vintrc.yaml      2> /dev/null;
 
 
 # Build Environment Files
@@ -25,6 +26,7 @@ rm -rf ./plugged/*/test       2> /dev/null;
 rm ./plugged/*/.appveyor.yml  2> /dev/null;
 rm ./plugged/*/.travis.yml    2> /dev/null;
 rm ./plugged/*/Dockerfile     2> /dev/null;
+rm ./plugged/*/Makefile       2> /dev/null;
 
 # Meta Data
 
@@ -50,11 +52,6 @@ rm ./plugged/ale/run-tests          2> /dev/null;
 rm ./plugged/ale/run-tests.bat      2> /dev/null;
 rm ./plugged/ale/supported-tools.md 2> /dev/null;
 rm -rf ./plugged/ale/img            2> /dev/null;
-
-
-echo "> Cleaning supertab ...";
-
-rm ./plugged/supertab/Makefile 2> /dev/null;
 
 
 echo "> Cleaning lightline.vim ...";
