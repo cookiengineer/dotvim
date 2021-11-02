@@ -91,5 +91,4 @@ Plugin 'https://github.com/jamessan/vim-gnupg'
 Plugin 'https://github.com/vim-utils/vim-man'
 Plugin 'https://github.com/matze/vim-move'
 Plugin 'https://github.com/andymass/vim-tradewinds'
-Plugin 'https://github.com/Konfekt/vim-unicode-homoglyphs'
 
