@@ -1,19 +1,19 @@
 
 " set statusline+=%#warningmsg#
 
-let g:ale_linters = { 'javascript': [ 'eslint' ] }
+let g:ale_linters = { 'go': [ 'gofmt' ], 'javascript': [ 'eslint' ] }
 
-if filereadable(".eslintrc")
-	let g:ale_linters = { 'javascript': [ 'eslint' ] }
-endif
-
-if filereadable(".eslintrc.yml")
-	let g:ale_linters = { 'javascript': [ 'eslint' ] }
-endif
-
-if filereadable(".eslintrc.json")
-	let g:ale_linters = { 'javascript': [ 'eslint' ] }
-endif
+" if filereadable(".eslintrc")
+" 	let g:ale_linters = { 'go': [ 'gofmt' ], 'javascript': [ 'eslint' ] }
+" endif
+"
+" if filereadable(".eslintrc.yml")
+" 	let g:ale_linters = { 'go': [ 'gofmt' ], 'javascript': [ 'eslint' ] }
+" endif
+"
+" if filereadable(".eslintrc.json")
+" 	let g:ale_linters = { 'go': [ 'gofmt' ], 'javascript': [ 'eslint' ] }
+" endif
 
 
 let g:ale_set_quickfix = 0
